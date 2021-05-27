@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data[0]['name'] }}</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+</head>
+<body>
+
+<div class="table-wrapper">
+    <table class="btn_table">
+        <tr>
+            <td>
+                <div class="for_btn">
+                    <a href="/worker_add_form" class="btn">{{ b_names["add"] }}</a>
+                </div>
+            </td>
+            <td>
+                <div class="for_btn">
+                        <a href="/worker_edit_form/{{data[0][col_names[0]]}}" class="btn">{{ b_names["edit"] }}</a>
+                </div>
+            </td>
+            <td>
+                <div class="for_btn">
+                    <form action="/w_del" method="POST">
+                        <input type="hidden" name="id" value={{ data[0][col_names[0]] }}>
+                        <button id="w3-btn" class="btn">{{ b_names["delete"] }}</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <table class="fl-table2">
+        {% for col in data_cols[1:] %}
+        <tr>
+            <td><b>{{ col_names[loop.index] }}</b></td>
+            {% if col in ['working', 'driver', 'teudat_zeut'] %}
+            <td>{{ b_names[data[0][col]] }}</td>
+            {% elif col == 'experience' %}
+            <td><textarea cols="33" name={{col}} rows="6">{{ data[0][data_cols[loop.index]] }}</textarea></td>
+            {% elif col == 'marital_status' %}
+            <td>{{ b_names[data[0][col]] }}</td>
+            {% else %}
+            <td>{{data[0][col]}}</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br>
+    <div class="for_btn">
+            <a href="/workers" class="btn">{{ b_names["back_list"] }}</a>
+    </div>
+
+</div>
+<script>
+    // Обращаюсь к кнопке с атрибутом id="w3-btn"
+    // Если кнопок на странице будет несколько, то нужно будет назначить им какой-нибудь класс и скорректировать код ниже (напишешь мне)
+    var deleteBtn = document.getElementById('w3-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function(evt) {
+            var choise = confirm("Confirm delete?"); // Здесь можешь исправить сообщение в попапе, если необходимо
+            if (!choise) evt.preventDefault();
+        });
+    }
+</script>
+</body>
+</html>

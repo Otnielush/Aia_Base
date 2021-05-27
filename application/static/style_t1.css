@@ -1,0 +1,272 @@
+*{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 5;
+	background: linear-gradient(45deg, #49a09d, #5f2c82);
+	font-family: sans-serif;
+	font-weight: 100;
+}
+h2{
+    text-align: center;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 30px 0;
+}
+
+h3{
+    text-align: center;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    padding: 0px 0;
+}
+/* button */
+
+.for_btn {
+  display: flex;
+}
+
+.btn {
+  font-size: 0.75rem;
+  padding: 0.5rem 1rem;
+  color: #f4f4f4;   /* #f4f4f4; */
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid rgb(146, 148, 248);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  font-weight: bold;
+}
+
+.btn:hover {
+  box-shadow: 1px 1px 25px 10px rgba(146, 148, 248, 0.4);
+}
+
+.btn:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(146, 148, 248, 0.4),
+    transparent
+  );
+  transition: all 650ms;
+}
+
+.btn:hover:before {
+  left: 100%;
+}
+
+/* Table Styles */
+.btn_table {
+    border-radius: 5px;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 500px;
+    white-space: nowrap;
+    align: center;
+
+}
+.btn_table td, .btn_table th {
+    text-align: center;
+    padding-right: 30px;
+}
+
+.table-wrapper{
+    margin: 10px 70px 70px;
+    box-shadow: 0px 35px 50px rgba( 0, 0, 0, 0.2 );
+}
+
+.fl-table {
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 100%;
+    white-space: nowrap;
+    background-color: white;
+}
+
+.fl-table td, .fl-table th {
+    text-align: center;
+    padding: 8px;
+}
+
+.fl-table td {
+    font-size: 13px;
+}
+
+.fl-table thead th {
+    text-align: center;
+    color: #ffffff;
+    background: #4FC3A1;
+}
+
+.fl-table thead th:nth-child(odd) {
+    color: #ffffff;
+    background: #324960;
+}
+
+.fl-table tr:nth-child(even) {
+    background: #F8F8F8;
+}
+
+/* table 2 */
+.fl-table2 {
+    border-radius: 10px 10px 10px 10px;
+    font-size: 12px;
+    font-weight: normal;
+    border: none;
+    border-collapse: collapse;
+    width: 20%;
+    max-width: 800px;
+    min-width: 400px;
+    white-space: nowrap;
+    background-color: white;
+    margin: 0em 2em 0em;
+}
+
+.fl-table2 td, .fl-table2 th {
+    text-align: left;
+    padding: 8px;
+    width: 60px;
+
+}
+.fl-table2 tr th:first-child, .fl-table2 tr td:first-child {
+  width: 1%;
+  min-width: 3em;
+  word-break: break-all;
+  border-right: 1px solid #DFDFDF;
+}
+.fl-table2 td {
+    font-size: 12px;
+}
+.fl-table2 thead th, .fl-table2 tfoot tr td{
+    color: #ffffff;
+    background: #4FC3A1;
+}
+.fl-table2 thead th:nth-child(odd), .fl-table2 tfoot td:nth-child(odd) {
+    color: #ffffff;
+    background: #324960;
+}
+.fl-table2 tr:nth-child(even), .fl-table2  tfoot td:nth-child(even) {
+    background: #F8F8F8;
+}
+
+/* Pagination */
+.paginatio td {
+    min-width: 120px;
+}
+.pagination a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-decoration: none;
+  color: #ffffff;
+  height: 35px;
+  min-width: 50px;
+  font-size: 16px;
+  padding-top: 1px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border: 2px solid rgb(146, 148, 248);
+  box-shadow: inset 4px 4px 4px 0px rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.05)
+ }
+
+.pagination a:hover {
+  box-shadow: inset 4px 4px 4px 0px rgba(0, 0, 0, 0.2);
+}
+.pagination a.icon {
+  min-width: 120px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 767px) {
+    .fl-table {
+        display: block;
+        width: 100%;
+    }
+    .table-wrapper:before{
+        content: "Scroll horizontally >";
+        display: block;
+        text-align: right;
+        font-size: 11px;
+        color: white;
+        padding: 0 0 10px;
+    }
+    .fl-table thead, .fl-table tbody, .fl-table thead th {
+        display: block;
+    }
+    .fl-table thead th:last-child{
+        border-bottom: none;
+    }
+    .fl-table thead {
+        float: left;
+    }
+    .fl-table tbody {
+        width: auto;
+        position: relative;
+        overflow-x: auto;
+    }
+    .fl-table td, .fl-table th {
+        padding: 20px .625em .625em .625em;
+        height: 60px;
+        vertical-align: middle;
+        box-sizing: border-box;
+        overflow-x: hidden;
+        overflow-y: auto;
+        width: 120px;
+        font-size: 13px;
+        text-overflow: ellipsis;
+    }
+    .fl-table thead th {
+        text-align: left;
+        border-bottom: 1px solid #f7f7f9;
+    }
+    .fl-table tbody tr {
+        display: table-cell;
+    }
+    .fl-table tbody tr:nth-child(odd) {
+        background: none;
+    }
+    .fl-table tr:nth-child(even) {
+        background: transparent;
+    }
+    .fl-table tr td:nth-child(odd) {
+        background: #F8F8F8;
+        border-right: 1px solid #E6E4E4;
+    }
+    .fl-table tr td:nth-child(even) {
+        border-right: 1px solid #E6E4E4;
+    }
+    .fl-table tbody td {
+        display: block;
+        text-align: center;
+    }
+}

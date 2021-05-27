@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jobs</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+</head>
+<body>
+<p>
+    <br>
+<div class="table-wrapper">
+    <table class="btn_table">
+        <thead>
+        <th>
+            <div class="for_btn">
+                <a href="/job_add_form" methods="GET" class="btn">{{ b_names["add"] }}</a>
+            </div>
+        </th>
+        <th>
+
+        </th>
+        <th>
+            <form action="{{url_for('jobs')}}" method="POST">
+                <input name=q size="31" type="text">
+        </th>
+        <th>
+            <div class="for_btn">
+                <button class="btn">{{ b_names["search"] }}</button>
+                </form>
+            </div>
+        </th>
+        </thead>
+    </table>
+    </p>
+
+    <table class="fl-table">
+        <thead>
+        {% for col in col_names[1:] %}
+        <th>{{col}}</th>
+        {% endfor %}
+        </thead>
+        {% for row in data %}
+        <tr>
+            {% for col in data_cols[1:] %}
+            {% if col == 'name' %}
+            <td><a href='/j/{{row[col_names[0]]}}'>{{row[col]}}</a></td>
+            {% elif col in ['cv','photo'] %}
+            <td><a href={{row[col]}} download>{{col}}</a></td>
+            {% else %}
+            <td>{{row[col]}}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <div class="for_btn">
+        <a href="/" class="btn">{{ b_names["back_main"] }}</a>
+    </div>
+</div>
+</body>
+</html>

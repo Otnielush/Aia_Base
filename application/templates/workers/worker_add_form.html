@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New worker</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+</head>
+
+<body>
+<div class="table-wrapper">
+    <form action="{{url_for('worker_add')}}" method="post">
+        <table class="fl-table2">
+            <thead>
+            <th colspan="2">
+                <h3>{{ b_names["title"] }}</h3>
+            </th>
+            </thead>
+            {% for col in data_cols %}
+            <tr>
+                {% if col == 'experience' %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><textarea rows="6" cols="33" name={{col}}></textarea></td>
+                {% elif col in ['working', 'driver', 'teudat_zeut'] %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><select name={{col}}>
+                    {% for val in [0,1] %}
+                        <option value={{ val }}>{{ b_names[val] }}</option>
+                    {% endfor %}
+                </select></td>
+
+                {% elif col == 'marital_status' %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><select name={{col}}>
+                    <option value="single">{{ b_names["single"] }}</option>
+                    <option value="married">{{ b_names["married"] }}</option>
+                    <option value="divorced">{{ b_names["divorced"] }}</option>
+                    <option value="widowed">{{ b_names["widowed"] }}</option>
+                </select></td>
+                {% else %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><input type="text" size="31" name={{col}}></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <tfoot>
+            <tr>
+                <td colspan="2">
+                    <div class="for_btn">
+                        <button class="btn">{{ b_names["submit"] }}</button>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <!--    Name<br>-->
+        <!--    <input type="text" name="name"/><br>-->
+        <!--    Address<br>-->
+        <!--    <textarea type="text" name="address"></input><br>-->
+        <!--    City<br>-->
+        <!--    <input type="text" name="city" id=""><br>-->
+        <!--    PinCode<br>-->
+        <!--    <input type="text" name="pin"><br><br>-->
+    </form>
+    <br> <br>
+    <div class="for_btn">
+        <a href="/workers" class="btn">{{ b_names["back_list"] }}</a>
+    </div>
+    <br>
+    <br>
+</div>
+</body>
+</html>

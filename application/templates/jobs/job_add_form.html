@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New job</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+</head>
+<body>
+
+<div class="table-wrapper">
+    <form action="{{url_for('job_add')}}" method="post">
+        <table class="fl-table2">
+            <thead>
+            <th colspan="2">
+                <h3>{{ b_names["title"] }}</h3>
+            </th>
+            </thead>
+            {% for col in data_cols %}
+            <tr>
+                {% if col == 'details' %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><textarea rows="6" cols="33" name={{col}}></textarea></td>
+
+                {% else %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><input type="text" size="31" name={{col}}></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <tfoot>
+            <tr>
+                <td colspan="2">
+                    <div class="for_btn">
+                        <button class="btn">{{ b_names["submit"] }}</button>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+
+    </form>
+    <br> <br>
+    <div class="for_btn">
+        <a href="/jobs" class="btn">{{ b_names["back_list"] }}</a>
+    </div>
+    <br>
+    <br>
+</div>
+</body>
+</html>

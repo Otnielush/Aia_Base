@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Workers</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+
+    <!--    For filter  https://www.w3schools.com/howto/howto_js_filter_table.asp-->
+
+    <script>
+var current_page = 1;
+var records_per_page = 50;
+
+var col_names = {{ col_names|tojson }};
+var data_cols = {{ data_cols|tojson }};
+var var_yes = {1:{{ b_names[1]|tojson }},
+                0:{{ b_names[0]|tojson }}};
+
+var data = {{ data|tojson }};
+
+var headTable = "<thead>";
+for ( i = 0; i < col_names.length; i++){
+    headTable += "<th>"+col_names[i]+"</th>";
+}
+headTable += "</thead>";
+
+
+function prevPage()
+{
+    if (current_page > 1) {
+        current_page--;
+        changePage(current_page);
+    }
+}
+
+function nextPage()
+{
+    if (current_page < numPages()) {
+        current_page++;
+        changePage(current_page);
+    } else {
+        document.getElementById("print").innerHTML = current_page+" -";
+    }
+}
+
+function changePage(page)
+{
+    var btn_next = document.getElementById("btn_next");
+    var btn_prev = document.getElementById("btn_prev");
+    var listing_table = document.getElementById("listingTable");
+    var page_span = document.getElementById("page");
+    var page_span2 = document.getElementById("page2");
+    var pages = numPages();
+    var tableHTML = headTable;
+    var prints = document.getElementById("print");
+    prints.innerHTML = "";
+<!--    prints.innerHTML += var_yes;-->
+
+    // Validate page
+    if (page < 1) page = 1;
+    if (page > pages) page = pages;
+
+    page_span.innerHTML = page+' / '+pages;
+    page_span2.innerHTML = page+' / '+pages;
+
+    if (page == 1) {
+        btn_prev.style.visibility = "hidden";
+        btn_prev2.style.visibility = "hidden";
+    } else {
+        btn_prev.style.visibility = "visible";
+        btn_prev2.style.visibility = "visible";
+    }
+
+    if (page == pages) {
+        btn_next.style.visibility = "hidden";
+        btn_next2.style.visibility = "hidden";
+    } else {
+        btn_next.style.visibility = "visible";
+        btn_next2.style.visibility = "visible";
+    }
+
+    listing_table.innerHTML = "";
+    tableHTML = headTable;
+
+
+    for (var i = (page-1) * records_per_page; i < Math.min(data.length, (page * records_per_page)); i++) {
+        tableHTML += "<tr>";
+
+        for (var j=0; j<data_cols.length; j++){
+            if (data_cols[j] == 'name'){
+                tableHTML += "<td><a href='/w/"+ String(data[i][data_cols[0]]) +"'>"+data[i][data_cols[j]]+"</a></td>";
+            } else if (['working', 'driver', 'teudat_zeut'].includes(data_cols[j])) {
+                if (data[i][data_cols[j]] == 1 || data[i][data_cols[j]] == 0) {
+                    tableHTML += "<td>"+var_yes[data[i][data_cols[j]]]+"</td>";
+                } else {
+                    tableHTML += "<td>"+data[i][data_cols[j]]+"</td>";
+                };
+            } else {
+                tableHTML += "<td>"+data[i][data_cols[j]]+"</td>";
+            }
+        }
+        tableHTML += "</tr>";
+    };
+
+    tableHTML += "</tr>";
+    listing_table.innerHTML = tableHTML;
+}
+
+function numPages()
+{
+    return Math.ceil(data.length / records_per_page);
+}
+
+window.onload = function() {
+    changePage(1);
+};
+
+
+
+
+    </script>
+
+</head>
+<body>
+<p>
+    <br>
+
+<div class="table-wrapper">
+    <table class="btn_table">
+        <thead>
+        <th>
+            <div class="for_btn">
+                <a href="/" class="btn">{{ b_names["back_main"] }}</a>
+            </div>
+        </th>
+        <th>
+            <div class="for_btn">
+                <a href="/worker_add_form" methods="GET" class="btn">{{ b_names["add"] }}</a>
+            </div>
+        </th>
+        <th>
+        </th>
+        <th>
+        </th>
+        <th>
+            <form action="{{url_for('workers')}}" method="POST">
+                <input name=q size="31" type="text">
+        </th>
+        <th>
+            <div class="for_btn">
+                <button class="btn">{{ b_names["search"] }}</button>
+                </form>
+            </div>
+        </th>
+        </thead>
+    </table>
+    </p>
+
+    <table border="0" class="pagination">
+        <tr>
+            <td style="width: 260px;">
+            </td>
+            <td>
+                <a href="javascript:prevPage()" id="btn_prev">{{ b_names["prev"] }}</a>
+                </td>
+            <td>
+                <a href="javascript:nextPage()" id="btn_next">{{ b_names["next"] }}</a>
+            </td>
+            <td style="padding-left: 20px;">
+                <p style="color:white">{{ b_names["page"] }}: <span id="page"></span></p>
+            </td>
+        </tr>
+    </table>
+
+
+    <table class="fl-table" id="listingTable">
+        <thead>
+        {% for col in col_names[:] %}
+        <th>{{ col }}</th>
+        {% endfor %}
+        </thead>
+        {% for row in data %}
+        <tr>
+            {% for col in data_cols[:] %}
+            {% if col == 'name' %}
+            <td><a href='/w/{{row[col_names[0]]}}'>{{row[col]}}</a></td>
+            {% elif col in ['working', 'driver', 'teudat_zeut'] %}
+            <td>{{ b_names[row[col]] }}</td>
+            {% else %}
+            <td>{{row[col]}}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <table border="0" class="pagination">
+        <tr>
+            <td style="width: 260px;">
+            </td>
+            <td>
+                <a href="javascript:prevPage()" id="btn_prev2">{{ b_names["prev"] }}</a>
+                </td>
+            <td>
+                <a href="javascript:nextPage()" id="btn_next2">{{ b_names["next"] }}</a>
+            </td>
+            <td style="padding-left: 20px;">
+                <p style="color:white">{{ b_names["page"] }}: <span id="page2"></span></p>
+            </td>
+        </tr>
+    </table>
+
+    <div class="for_btn">
+        <a href="/" class="btn">{{ b_names["back_main"] }}</a>
+    </div>
+</div>
+<span id="print">++++</span>
+<br>
+</body>
+</html>

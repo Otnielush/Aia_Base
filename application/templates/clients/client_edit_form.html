@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data[0]['name'] }}</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+    </link>
+</head>
+
+<body>
+<div class="table-wrapper">
+    <form action="/client_update" method="post">
+        <table class="fl-table2">
+
+            <thead>
+            <th colspan="2">
+                <h3>{{ b_names["title"] }}</h3>
+            </th>
+            </thead>
+
+            {% for col in data_cols %}
+            <tr>
+                {% if col == 'id' %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><input name={{col}} readonly size="31" type="text" value={{data[0][col]}}></td>
+                {% else %}
+                <td><b>{{ col_names[loop.index0] }}</b></td>
+                <td><input name={{col}} size="31" type="text" value="{{data[0][col]}}"></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            <tfoot>
+            <tr>
+                <td colspan="2">
+                    <div class="for_btn">
+                        <button class="btn">{{ b_names["submit"] }}</button>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
+    <!--    Name<br>-->
+    <!--    <input type="text" name="name"/><br>-->
+    <!--    Address<br>-->
+    <!--    <textarea type="text" name="address"></input><br>-->
+    <!--    City<br>-->
+    <!--    <input type="text" name="city" id=""><br>-->
+    <!--    PinCode<br>-->
+    <!--    <input type="text" name="pin"><br><br>-->
+    <br>
+    <div class="for_btn">
+        <a href="/clients" class="btn">{{ b_names["back_list"] }}</a>
+    </div>
+    <br>
+</div>
+<br>
+</body>
+</html>

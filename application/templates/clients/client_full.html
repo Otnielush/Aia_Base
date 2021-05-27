@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data[0]['name'] }}</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+</head>
+
+<body>
+<div class="table-wrapper">
+    <table class="btn_table">
+        <tr>
+            <td>
+                <div class="for_btn">
+                    <a href="/client_add_form" class="btn">{{ b_names["add"] }}</a>
+                </div>
+            </td>
+            <td>
+                <div class="for_btn">
+                        <a href="/client_edit_form/{{data[0][col_names[0]]}}" class="btn">{{ b_names["edit"] }}</a>
+                </div>
+            </td>
+            <td>
+                <div class="for_btn">
+                    <form action="/c_del" method="POST">
+                        <input type="hidden" name="id" value={{ data[0][col_names[0]] }}>
+                        <button id="w3-btn" class="btn">{{ b_names["delete"] }}</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br>
+
+    <table class="fl-table2">
+        {% for col in data_cols[1:] %}
+        <tr>
+            <td><b>{{ col_names[loop.index] }}</b></td>
+            <td>{{data[0][col]}}</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <div class="for_btn">
+            <a href="/clients" class="btn">{{ b_names["back_list"] }}</a>
+    </div>
+
+</div>
+<script>
+    // Обращаюсь к кнопке с атрибутом id="w3-btn"
+    // Если кнопок на странице будет несколько, то нужно будет назначить им какой-нибудь класс и скорректировать код ниже (напишешь мне)
+    var deleteBtn = document.getElementById('w3-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', function(evt) {
+            var choise = confirm("Confirm delete?"); // Здесь можешь исправить сообщение в попапе, если необходимо
+            if (!choise) evt.preventDefault();
+        });
+    }
+</script>
+</body>
+</html>

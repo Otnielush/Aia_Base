@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+    {% if not autolink %}
+    {% set autolink = '/' %}
+    {% endif %}
+    {% if not delay_time %}
+    {% set delay_time = 5 %}
+    {% endif %}
+    <meta charset="UTF-8" http-equiv="refresh" content="{{delay_time}}; {{ autolink }}">
+    <title>Result page</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+</head>
+
+<body>
+<div class="table-wrapper">
+    <h2>{{msg}}</h2>
+    <h3>Relocating after {{delay_time}} seconds</h3>
+<table align="center" style="fl-table">
+    <tr>
+        <td>
+            <div class="for_btn">
+                <a href="/" class="btn">{{ b_names["back_main"] }}</a>
+            </div>
+        </td>
+    </tr>
+</table>
+</div>
+
+
+
+</body>
