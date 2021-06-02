@@ -1,13 +1,14 @@
 <html>
 <head>
     <title>
-        Sign Up
+        Log in
     </title>
     <link href="/static/home.css" rel="stylesheet">
+    <script src="{{ url_for('static', filename='alert.js') }}"></script>
 </head>
 <body>
 
-  <div class="form-wrapper">
+ <div class="form-wrapper">
 
 <!--    <div class="logo">-->
 <!--      <img-->
@@ -22,27 +23,16 @@
           type="button"
           class="close"
           data-dismiss="alert">
-          x
-        </button>
+            x
+          </button>
         {{ message }}
       </div>
     {% endfor %}
 
-    <h1>Sign Up</h1>
+    <h1>Log In</h1>
 
-    <form method="POST" action="/signup">
+    <form method="POST" action="/login">
       {{ form.csrf_token }}
-
-      <fieldset class="name">
-        {{ form.name.label }}
-        {{ form.name(placeholder='John Smith') }}
-        {% if form.name.errors %}
-          <ul class="errors">
-            {% for error in form.email.errors %}
-              <li>{{ error }}</li>{% endfor %}
-          </ul>
-        {% endif %}
-      </fieldset>
 
       <fieldset class="email">
         {{ form.email.label }}
@@ -58,7 +48,7 @@
       <fieldset class="password">
         {{ form.password.label }}
         {{ form.password }}
-        {% if form.password.errors %}
+        {% if form.email.errors %}
           <ul class="errors">
             {% for error in form.password.errors %}
               <li>{{ error }}</li>{% endfor %}
@@ -66,34 +56,16 @@
         {% endif %}
       </fieldset>
 
-      <fieldset class="confirm">
-        {{ form.confirm.label }}
-        {{ form.confirm }}
-        {% if form.confirm.errors %}
-          <ul class="errors">
-            {% for error in form.confirm.errors %}
-              <li>{{ error }}</li>{% endfor %}
-          </ul>
-        {% endif %}
-      </fieldset>
-
-      <fieldset class="phone">
-        {{ form.phone.label }}
-        {{ form.phone(placeholder='0512345678') }}
-      </fieldset>
-
       <div class="submit-button">
         {{ form.submit }}
       </div>
 
-    </form>
-
-    <div class="login-signup">
-      <div>
-        <span>Already have an account?</span>
-        <a href="{{ url_for('login') }}">Log in.</a>
+      <div class="login-signup">
+        <span>Don't have an account?</span>
+        <a href="{{ url_for('signup') }}">Sign up.</a>
       </div>
-    </div>
+
+    </form>
   </div>
 
 </body>

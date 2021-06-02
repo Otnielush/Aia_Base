@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Work searchers</title>
+    <link rel="stylesheet" href="/static/style_t1.css"/>
+
+    <!--    For filter  https://www.w3schools.com/howto/howto_js_filter_table.asp-->
+
+    <script>
+
+function prevPage()
+{
+
+}
+
+function nextPage()
+{
+
+}
+
+function changePage(page)
+{
+
+}
+
+function numPages()
+{
+
+}
+
+window.onload = function() {
+
+};
+
+
+    </script>
+
+</head>
+<body>
+<p>
+    <br>
+
+<div class="table-wrapper">
+    <table class="btn_table">
+        <thead>
+        <th>
+            <div class="for_btn">
+                <a href="/" class="btn">{{ b_names["back_main"] }}</a>
+            </div>
+        </th>
+        {% if fb_delay %}
+            <th>
+                <div class="for_btn">
+                    <a href="/fb_scrap" methods="GET" class="btn">{{ b_names["update"] }}</a>
+                </div>
+            </th>
+        {% endif %}
+        </thead>
+    </table>
+    </p>
+
+    <table border="0" class="pagination">
+        <tr>
+            <td style="width: 260px;">
+            </td>
+            <td>
+                <a href="javascript:prevPage()" id="btn_prev">{{ b_names["prev"] }}</a>
+                </td>
+            <td>
+                <a href="javascript:nextPage()" id="btn_next">{{ b_names["next"] }}</a>
+            </td>
+            <td style="padding-left: 20px;">
+                <p style="color:white">{{ b_names["page"] }}: <span id="page"></span></p>
+            </td>
+        </tr>
+    </table>
+
+
+    <table class="fl-table" id="listingTable">
+        <thead>
+        {% for col in col_names[:] %}
+        <th>{{ col }}</th>
+        {% endfor %}
+        </thead>
+        {% for row in data %}
+        <tr>
+            {% for col in data_cols[:] %}
+            {% if col == 'post_url' %}
+            <td><a href="{{ row['post_url'] }}" target="_blank">Open post</a></td>
+            {% elif col == 'processed' %}
+            <td>{{ b_names[row[col]] }}</td>
+            {% elif col == 'username' %}
+            <td><a href="https://www.facebook.com/profile.php?id={{ row['user_id'] }}" target="_blank">{{row[col]}}</a></td>
+            {% else %}
+            <td>{{row[col]}}</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <table border="0" class="pagination">
+        <tr>
+            <td style="width: 260px;">
+            </td>
+            <td>
+                <a href="javascript:prevPage()" id="btn_prev2">{{ b_names["prev"] }}</a>
+                </td>
+            <td>
+                <a href="javascript:nextPage()" id="btn_next2">{{ b_names["next"] }}</a>
+            </td>
+            <td style="padding-left: 20px;">
+                <p style="color:white">{{ b_names["page"] }}: <span id="page2"></span></p>
+            </td>
+        </tr>
+    </table>
+
+    <div class="for_btn">
+        <a href="/" class="btn">{{ b_names["back_main"] }}</a>
+    </div>
+</div>
+<span id="print">++++</span>
+<br>
+</body>
+</html>

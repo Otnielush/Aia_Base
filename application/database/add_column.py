@@ -22,17 +22,17 @@ import sqlite3
 #     print("**SQL Statement**: %s" % (table[4]))
 
 
-def db_add_column(db, column_name, column_type):
+def db_add_column(db_file, table, column_name, column_type):
     # Make a connection to the SQLite DB
-    dbCon = sqlite3.connect("database.db")
+    dbCon = sqlite3.connect(db_file)
     # Obtain a Cursor object to execute SQL statements
     cur = dbCon.cursor()
     # Add a new column to student table
-    addColumn = "ALTER TABLE {} ADD COLUMN {} {}".format(db, column_name, column_type)
+    addColumn = "ALTER TABLE {} ADD COLUMN {} {}".format(table, column_name, column_type)
     cur.execute(addColumn)
     # close the database connection
     dbCon.close()
     print('Column', column_name, 'added')
 
 if __name__ == '__main__':
-    db_add_column('workers', 'driver', 'INTEGER')
+    db_add_column('facebook.db','post_work', 'group_name', 'TEXT')

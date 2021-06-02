@@ -90,7 +90,7 @@ def init_workers(app):
 
     @app.route('/worker_add', methods=['POST'])
     def worker_add():
-        whatsapp_send = True
+        whatsapp_send = False
         # Lang selector
         _, button_names = lang_select(app.lang, 'workers')
         if request.method == 'POST':
@@ -104,7 +104,10 @@ def init_workers(app):
                                            delay_time=2)
             # duplicate check by name, lastname
             names = db_search('workers', 'name', request.form['name'])
-            l_names = db_search('workers', 'lastname', request.form['lastname'])
+            if len(request.form['lastname']) > 0:
+                l_names = db_search('workers', 'lastname', request.form['lastname'])
+            else:
+                l_names = []
             ids = np.intersect1d(names, l_names)
             if len(ids) > 0:
                 msg = "Record already exist"
@@ -139,46 +142,50 @@ def init_workers(app):
                 msg = "Record successfully added"
                 # WhatsApp message
                 if whatsapp_send:
-                    if request.form['whatsapp']:
-                        if str(request.form['whatsapp'])[0] == '+':
-                            phone = str(request.form['whatsapp'])
-                        elif str(request.form['whatsapp'])[0:2] == '05':
-                            phone = '+972' + str(request.form['whatsapp'])[1:]
-                        elif str(request.form['whatsapp'])[0] == '5':
-                            phone = '+972' + str(request.form['whatsapp'])
+                    try:
+                        if request.form['whatsapp']:
+                            if str(request.form['whatsapp'])[0] == '+':
+                                phone = str(request.form['whatsapp'])
+                            elif str(request.form['whatsapp'])[0:2] == '05':
+                                phone = '+972' + str(request.form['whatsapp'])[1:]
+                            elif str(request.form['whatsapp'])[0] == '5':
+                                phone = '+972' + str(request.form['whatsapp'])
+                            else:
+                                phone = ''
+
+                            if phone:
+                                phone = '\nwa.me/' + phone
+                        elif request.form['phone']:
+                            if str(request.form['phone'])[0] == '+':
+                                phone = str(request.form['phone'])
+                            elif str(request.form['phone'])[0:2] == '05':
+                                phone = '+972' + str(request.form['phone'])[1:]
+                            elif str(request.form['phone'])[0] == '5':
+                                phone = '+972' + str(request.form['phone'])
+                            else:
+                                phone = ''
                         else:
                             phone = ''
 
-                        if phone:
-                            phone = '\nwa.me/' + phone
-                    elif request.form['phone']:
-                        if str(request.form['phone'])[0] == '+':
-                            phone = str(request.form['phone'])
-                        elif str(request.form['phone'])[0:2] == '05':
-                            phone = '+972' + str(request.form['phone'])[1:]
-                        elif str(request.form['phone'])[0] == '5':
-                            phone = '+972' + str(request.form['phone'])
+                        if request.form['age']:
+                            age = ', ' + str(request.form['age']) + ' лет'
                         else:
-                            phone = ''
-                    else:
-                        phone = ''
+                            age = ''
+                        if request.form['city']:
+                            city = ', ' + str(request.form['city'])
+                        else:
+                            city = ''
+                        if request.form['look_for']:
+                            look_for = '\n*Ищет:* ' + str(request.form['look_for'])
+                        else:
+                            look_for = ''
+                        wa_msg = '*Новая анкета:*\n{} {}{}{}{}{}'.format(request.form['name'],
+                                                                         request.form['lastname'], age, city,
+                                                                         phone, look_for)
 
-                    if request.form['age']:
-                        age = ', ' + str(request.form['age']) + ' лет'
-                    else:
-                        age = ''
-                    if request.form['city']:
-                        city = ', ' + str(request.form['city'])
-                    else:
-                        city = ''
-                    if request.form['look_for']:
-                        look_for = '\n*Ищет:* ' + str(request.form['look_for'])
-                    else:
-                        look_for = ''
-                    wa_msg = '*Новая анкета:*\n{} {}{}{}{}{}'.format(request.form['name'],
-                                                                     request.form['lastname'], age, city,
-                                                                     phone, look_for)
-                    app.whatsapp.new_worker_msg(wa_msg)
+                        app.whatsapp.new_worker_msg(wa_msg)
+                    except:
+                        print('Whatsapp message not sended')
 
             except Exception as ex:
                 con.rollback()
@@ -191,7 +198,7 @@ def init_workers(app):
 
     @app.route('/workers', methods=['POST', 'GET'])
     def workers():
-        rows = [0, 1, 2, 3, 11, 12, 13, 17, 20, 22]  # to show on page
+        rows = [0, 1, 2, 5, 3, 11, 12, 13, 20, 22]  # to show on page
         con = sql.connect(DB_ROOT)
         con.row_factory = sql.Row
 

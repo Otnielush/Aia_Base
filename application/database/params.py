@@ -6,13 +6,13 @@ button_names_w = {'eng':
                      'back_main': 'Back to homepage', 'search':'Search', 'submit':'Submit', 'title':'WORKER INFORMATION',
                      'single':'single', 'married':'married', 'divorced':'divorced', 'widowed':'widowed',
                      'working':'working', 'free':'free', 'prev':'< prev', 'next':'next >', 'page':'page',
-                     1:'Yes', 0:'No'},
+                     1:'Yes', 0:'No', 'update':'update'},
                 'rus':
                     {'add': '+ Новый работник', 'edit': 'Редактировать', 'delete': 'удалить', 'back_list': 'Назад к списку',
                      'back_main': 'Назад на главную', 'search':'Поиск', 'submit':'Подтвердить', 'title':'Информация о рабочем',
                      'single':'холост', 'married':'женат', 'divorced':'разведён', 'widowed':'вдовец',
                      'working':'работает', 'free':'без работы', 'prev':'< пред', 'next':'след >', 'page':'страница',
-                     1:'Да', 0:'Нет'},
+                     1:'Да', 0:'Нет', 'update':'обновить'},
                 'heb':
                     {}}
 button_names_j = {'eng':
@@ -91,6 +91,13 @@ col_types_j = np.array(['INTEGER PRIMARY KEY', 'TEXT NOT NULL', 'TEXT', 'INTEGER
 cols_j_rus = np.array(['id', 'Название', "Город", 'Фирма', 'Зарплата', 'Описание', 'Рабочии',
                     'Контакное лицо', 'Контактный телефон', 'Контактный email', 'Дата обновления'])
 
+# FB jobs searchers posts
+cols_fb_work = np.array(['id', 'username', 'user_id', 'group_name', 'time', 'text',
+                         'post_url','processed'])
+col_types_fb_work = np.array(['INTEGER PRIMARY KEY', 'TEXT', 'TEXT', 'INTEGER', 'TIMESTAMP', 'TEXT',
+                              'TEXT NOT NULL UNIQUE', 'INTEGER DEFAULT 0'])
+
+
 
 import os
 import sqlite3 as sql
@@ -140,16 +147,16 @@ def db_search(db, column, text):
     return data
 
 # databese name, columns names, list of data
-def insert_to_db(db: str, cols: list, data: list):
+def insert_to_db(db: str, cols: list, data: list, db_file=DB_ROOT):
     if 'id' in cols:
         cols = list(cols)
         cols.remove('id')
     
-    command = 'INSERT INTO {} ('.format(db) + ', '.join(cols) + ') '
+    command = 'INSERT OR IGNORE INTO {} ('.format(db) + ', '.join(cols) + ') '
     vals = 'VALUES ('+ '?,'*len(cols)
     command += vals[:-1]+')'
     
-    if len(data[0]) != len(cols) and type(data[0]) != dict:
+    if len(data[0]) != len(cols):
         msg = '''Информация не добавлена.
         Incorrect number of bindings supplied. The current statement uses {}, and there are {} supplied'''.format(len(cols), len(data[0]))
         print(msg)
@@ -175,7 +182,7 @@ def insert_to_db(db: str, cols: list, data: list):
                     tt += ('',)
             insert_data.append(tt)
     
-    con = sql.connect(DB_ROOT)
+    con = sql.connect(db_file)
     cur = con.cursor()
     
     if len(insert_data) > 1:

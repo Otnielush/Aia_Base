@@ -1,11 +1,21 @@
 from os import path
 from flask import Flask, send_from_directory
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
+db = SQLAlchemy()
+login_manager = LoginManager()
 
 
 def init_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('application.database.config.DevConfig')
+
+    # Initialize Plugins
+    db.init_app(app)
+    # login_manager.init_app(app)
+
+
 
     @app.route('/favicon.ico')
     def favicon():
@@ -22,11 +32,13 @@ def init_app():
     app = init_jobs(app)
     from application.funcs.errors import init_errors
     app = init_errors(app)
-    from application.funcs.test import init_test
-    app = init_test(app)
+    from application.funcs.fb_scraper import init_fb_scraper; app = init_fb_scraper(app)
+    # from application.funcs.auth import init_auth; app = init_auth(app)
 
     app.lang = 'rus'
 
+    # Create Database Models
+    # db.create_all()
 
     # app.config.from_object('application.database.config.ProdConfig')
 
