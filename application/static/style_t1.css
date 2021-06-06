@@ -37,12 +37,19 @@ h3{
   display: flex;
 }
 
+.for_btn_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btn {
   font-size: 0.75rem;
   padding: 0.5rem 1rem;
   color: #f4f4f4;   /* #f4f4f4; */
   text-transform: uppercase;
   text-decoration: none;
+  text-align:center;
   border: 2px solid rgb(146, 148, 248);
   border-radius: 10px;
   position: relative;

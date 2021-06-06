@@ -26,4 +26,11 @@ def init_test(app):
 
     return app
 
-print(get_group_info('avodot'))
+# print(get_group_info('avodot'))
+
+for post in get_posts('groups/jobisrael/', pages=10):
+    try:
+        if bool(re.search(r'ищу* работу', post['text'])):
+            print(post['text'][:20], '\n', post['post_url'])
+    except:
+        pass

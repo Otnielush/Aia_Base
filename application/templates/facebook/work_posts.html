@@ -89,7 +89,7 @@ window.onload = function() {
             {% if col == 'post_url' %}
             <td><a href="{{ row['post_url'] }}" target="_blank">Open post</a></td>
             {% elif col == 'processed' %}
-            <td>{{ b_names[row[col]] }}</td>
+            <td><a href="/fb_searcher_check/{{row['id']}}/{{(row['processed']-1)*-1}}">{{ b_names[row[col]] }}</a></td>
             {% elif col == 'username' %}
             <td><a href="https://www.facebook.com/profile.php?id={{ row['user_id'] }}" target="_blank">{{row[col]}}</a></td>
             {% else %}

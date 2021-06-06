@@ -31,7 +31,7 @@ def init_fb_scraper(app):
 
 
         data = []
-        scraper_options = {"comments": False, "reactors": True, "allow_extra_requests": False, "posts_per_page": 200}
+        scraper_options = {"comments": False, "reactors": True, "allow_extra_requests": False, "posts_per_page": 80}
         for group in groups:
             for post in get_posts(group, pages=1, options=scraper_options):
                 searcher = []
@@ -56,7 +56,7 @@ def init_fb_scraper(app):
             insert_to_db('post_work', cols_fb_work[1:], data, DB_ROOT)
         app.fb_scrab_time = datetime.datetime.now()
 
-        return redirect('fb_work_posts')
+        return redirect('/fb_work_posts')
 
 
     @app.route("/fb_work_posts")
@@ -81,6 +81,24 @@ def init_fb_scraper(app):
         else: fb_delay = False
         return render_template('facebook/work_posts.html', data=data, data_cols=list(cols_fb_work[columns]),
                                col_names=list(cols_fb_work[columns]), b_names=button_names, fb_delay=fb_delay)
+
+    # change check status to record
+    @app.route('/fb_searcher_check/<int:id>/<int:val>/')
+    def fb_searcher_check(id, val):
+        try:
+            con = sql.connect(DB_ROOT)
+            command = f'UPDATE post_work SET processed = {val} WHERE post_work.id = {id}'
+            cur = con.cursor()
+            cur.execute(command)
+            con.commit()
+
+        except Exception as ex:
+            con.rollback()
+            print('record not updated:', ex)
+
+        finally:
+            con.close()
+            return redirect('/fb_work_posts')
 
     return app
 
