@@ -21,9 +21,12 @@
                 <td><b>{{ col_names[loop.index0] }}</b></td>
                 <td><textarea rows="6" cols="33" name={{col}}></textarea></td>
                 {% elif col in ['working', 'driver', 'teudat_zeut'] %}
+                    {% if col == 'working' %} {% set rng = [0,1,2] %}
+                        {% else %} {% set rng = [0,1] %}
+                    {% endif %}
                 <td><b>{{ col_names[loop.index0] }}</b></td>
                 <td><select name={{col}}>
-                    {% for val in [0,1] %}
+                    {% for val in rng %}
                         <option value={{ val }}>{{ b_names[val] }}</option>
                     {% endfor %}
                 </select></td>

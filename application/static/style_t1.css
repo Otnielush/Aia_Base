@@ -104,7 +104,7 @@ h3{
 }
 
 .fl-table {
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 12px;
     font-weight: normal;
     border: none;
@@ -113,6 +113,7 @@ h3{
     max-width: 100%;
     white-space: nowrap;
     background-color: white;
+
 }
 
 .fl-table td, .fl-table th {
@@ -122,6 +123,8 @@ h3{
 
 .fl-table td {
     font-size: 13px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
 .fl-table thead th {
@@ -137,6 +140,13 @@ h3{
 
 .fl-table tr:nth-child(even) {
     background: #F8F8F8;
+}
+
+.fl-table th:first-child {
+    border-top-left-radius: 8px;
+}
+.fl-table th:last-child {
+    border-top-right-radius: 8px;
 }
 
 /* table 2 */

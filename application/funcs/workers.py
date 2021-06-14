@@ -198,7 +198,7 @@ def init_workers(app):
 
     @app.route('/workers', methods=['POST', 'GET'])
     def workers():
-        rows = [0, 1, 2, 5, 3, 11, 12, 13, 20, 22]  # to show on page
+        rows = [0, 1, 2, 5, 3, 11, 12, 13, 17, 20, 22]  # to show on page
         con = sql.connect(DB_ROOT)
         con.row_factory = sql.Row
 
@@ -234,8 +234,9 @@ def init_workers(app):
                 dd['date_update'] = read_tstamp(dd['date_update'])
                 # dd['date_born'] = datetime.datetime.fromtimestamp(float(dd['date_born'])).strftime("%d-%m-%Y")
                 dd['name'] = dd['name'] + ' ' + dd['lastname']
-        # rem last name
-        rows.remove(2)
+
+        rows.remove(2)  # rem last name
+        rows.remove(17)  # rem working
 
         con.close()
 

@@ -6,13 +6,13 @@ button_names_w = {'eng':
                      'back_main': 'Back to homepage', 'search':'Search', 'submit':'Submit', 'title':'WORKER INFORMATION',
                      'single':'single', 'married':'married', 'divorced':'divorced', 'widowed':'widowed',
                      'working':'working', 'free':'free', 'prev':'< prev', 'next':'next >', 'page':'page',
-                     1:'Yes', 0:'No', 'update':'update'},
+                     1:'Yes', 0:'No', 2:'Yes. Other place', 'update':'update'},
                 'rus':
                     {'add': '+ Новый работник', 'edit': 'Редактировать', 'delete': 'удалить', 'back_list': 'Назад к списку',
                      'back_main': 'Назад на главную', 'search':'Поиск', 'submit':'Подтвердить', 'title':'Информация о рабочем',
                      'single':'холост', 'married':'женат', 'divorced':'разведён', 'widowed':'вдовец',
                      'working':'работает', 'free':'без работы', 'prev':'< пред', 'next':'след >', 'page':'страница',
-                     1:'Да', 0:'Нет', 'update':'обновить'},
+                     1:'Да', 0:'Нет', 2:'Да. Другое место', 'update':'обновить'},
                 'heb':
                     {}}
 button_names_j = {'eng':

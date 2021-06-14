@@ -27,9 +27,12 @@
                 <td><b>{{ col_names[loop.index0] }}</b></td>
                 <td><input name={{col}} readonly size="31" type="text" value={{data[0][col]}}></td>
                 {% elif col in ['working', 'driver', 'teudat_zeut'] %}
+                    {% if col == 'working' %} {% set rng = [0,1,2] %}
+                        {% else %} {% set rng = [0,1] %}
+                    {% endif %}
                 <td><b>{{ col_names[loop.index0] }}</b></td>
                 <td><select name={{col}} selected={{data[0][col]}}>
-                    {% for val in [0,1] %}
+                    {% for val in rng %}
                         {% if val == data[0][col] %}
                          <option value={{ val }} selected>{{ b_names[val] }}</option>
                         {% else %}

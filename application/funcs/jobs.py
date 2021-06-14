@@ -45,7 +45,9 @@ def init_jobs(app):
             print('record not deleted:', ex)
         finally:
             conn.close()
-            return render_template('result.html', msg=msg)
+            # Lang selector
+            cols_names, button_names = lang_select(app.lang, 'jobs')
+            return render_template('result.html', b_names=button_names, msg=msg)
 
 
     @app.route('/job_update', methods=['PUT', 'POST'])
@@ -79,12 +81,16 @@ def init_jobs(app):
 
         finally:
             con.close()
-            return render_template('result.html', msg=msg)
+            # Lang selector
+            cols_names, button_names = lang_select(app.lang, 'jobs')
+            return render_template('result.html', b_names=button_names, msg=msg)
 
 
     @app.route('/job_add', methods=['POST'])
     def job_add():
         if request.method == 'POST':
+            # Lang selector
+            _, button_names = lang_select(app.lang, 'jobs')
             try:
                 con = sql.connect(DB_ROOT)
                 data = ()
@@ -110,18 +116,18 @@ def init_jobs(app):
                 msg = "Record successfully added"
 
                 # WhatsApp message
-                if request.form['city']:
-                    city = str(request.form['city'])
-                else:
-                    city = ''
-                details = '\n*Детали:* {}'.format(request.form['details']) if request.form['details'] else ''
-                if request.form['wage']:
-                    wage = '\n*ЗП:* '+ str(request.form['wage'])
-                else:
-                    wage = ''
-                wa_msg = '*Новая вакансия:* {}\n*Город:* {}{}{}'.format(request.form['name'], city,
-                                                                 details, wage)
-                app.whatsapp.new_job_msg(wa_msg)
+                # if request.form['city']:
+                #     city = str(request.form['city'])
+                # else:
+                #     city = ''
+                # details = '\n*Детали:* {}'.format(request.form['details']) if request.form['details'] else ''
+                # if request.form['wage']:
+                #     wage = '\n*ЗП:* '+ str(request.form['wage'])
+                # else:
+                #     wage = ''
+                # wa_msg = '*Новая вакансия:* {}\n*Город:* {}{}{}'.format(request.form['name'], city,
+                #                                                  details, wage)
+                # app.whatsapp.new_job_msg(wa_msg)
 
 
             except Exception as ex:
@@ -131,7 +137,7 @@ def init_jobs(app):
 
             finally:
                 con.close()
-                return render_template('result.html', msg=msg)
+                return render_template('result.html', msg=msg, b_names=button_names, autolink='/jobs')
 
 
 
@@ -145,6 +151,7 @@ def init_jobs(app):
             cur = con.cursor()
             cur.execute("SELECT " + ', '.join(cols_j[rows]) + " FROM jobs ORDER BY date_update DESC")
             data = [dict(x) for x in cur.fetchall()]
+            # print("SELECT " + ', '.join(cols_j[rows]) + " FROM jobs ORDER BY date_update DESC")
 
 
         elif request.method == 'POST':
