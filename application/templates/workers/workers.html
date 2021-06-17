@@ -9,7 +9,14 @@
 
     <script>
 var current_page = 1;
-var records_per_page = 50;
+var records_per_page = 200;
+
+            {% if q is not defined or q == None %}
+                {% set q = '' %}
+            {% else %}
+                {% set q = '?q='+q %}
+            {% endif %}
+            var q_val = {{ q|tojson }};
 
 var col_names = {{ col_names|tojson }};
 var data_cols = {{ data_cols|tojson }};
@@ -46,6 +53,7 @@ function nextPage()
 
 function changePage(page)
 {
+
     var btn_next = document.getElementById("btn_next");
     var btn_prev = document.getElementById("btn_prev");
     var listing_table = document.getElementById("listingTable");
@@ -55,7 +63,7 @@ function changePage(page)
     var tableHTML = headTable;
     var prints = document.getElementById("print");
     prints.innerHTML = "";
-<!--    prints.innerHTML += var_yes;-->
+<!--    prints.innerHTML += q_val;-->
 
     // Validate page
     if (page < 1) page = 1;
@@ -96,7 +104,7 @@ function changePage(page)
                 } else {
                     tableHTML += "<td>"
                 }
-                tableHTML += "<a href='/w/"+ String(data[i][data_cols[0]]) +"'>"+data[i][data_cols[j]]+"</a></td>";
+                tableHTML += "<a href='/w/"+ String(data[i][data_cols[0]])+String(q_val) +"'>"+data[i][data_cols[j]]+"</a></td>";
             } else if (['working', 'driver', 'teudat_zeut'].includes(data_cols[j])) {
                 if (data[i][data_cols[j]] == 1 || data[i][data_cols[j]] == 0 || data[i][data_cols[j]] == 2) {
                     tableHTML += "<td>"+var_yes[data[i][data_cols[j]]]+"</td>";
@@ -143,7 +151,7 @@ window.onload = function() {
         </th>
         <th>
             <div class="for_btn">
-                <a href="/worker_add_form" methods="GET" class="btn">{{ b_names["add"] }}</a>
+                <a href="/worker_add_form{{q}}" methods="GET" class="btn">{{ b_names["add"] }}</a>
             </div>
         </th>
         <th>
@@ -151,8 +159,9 @@ window.onload = function() {
         <th>
         </th>
         <th>
-            <form action="{{url_for('workers')}}" method="POST">
+            <form action="/workers{{q}}" method="POST" >
                 <input name=q size="31" type="text">
+                <input type="hidden" name="next" value={{ q }}>
         </th>
         <th>
             <div class="for_btn">

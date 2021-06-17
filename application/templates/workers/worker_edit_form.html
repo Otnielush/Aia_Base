@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="/static/style_t1.css"/>
     </link>
 </head>
+            {% if q is not defined or q == None %}
+                {% set q = '' %}
+            {% else %}
+                {% set q = '?q='+q %}
+            {% endif %}
 <body>
 
 <div class="table-wrapper">
@@ -79,7 +84,7 @@
     <!--    <input type="text" name="pin"><br><br>-->
     <br>
     <div class="for_btn">
-        <a href="/workers" class="btn">{{ b_names["back_list"] }}</a>
+            <a href="/workers{{q}}" class="btn">{{ b_names["back_list"] }}</a>
     </div>
     <br>
 </div>

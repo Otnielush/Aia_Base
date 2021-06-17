@@ -43,7 +43,7 @@
         <tr>
             {% for col in data_cols[1:] %}
             {% if col == 'name' %}
-            <td><a href='/j/{{row[col_names[0]]}}'>{{row[col]}}</a></td>
+            <td><a onclick="window.open('/jpost/{{row[col_names[0]]}}', 'name','width=600,height=400')">+</a>&nbsp&nbsp&nbsp<a href='/j/{{row[col_names[0]]}}'>{{row[col]}}</a></td>
             {% elif col in ['cv','photo'] %}
             <td><a href={{row[col]}} download>{{col}}</a></td>
             {% else %}

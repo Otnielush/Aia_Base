@@ -5,6 +5,11 @@
     <title>{{ data[0]['name'] }}</title>
     <link rel="stylesheet" href="/static/style_t1.css"/>
 </head>
+            {% if q is not defined or q == None %}
+                {% set q = '' %}
+            {% else %}
+                {% set q = '?q='+q %}
+            {% endif %}
 <body>
 
 <div class="table-wrapper">
@@ -12,12 +17,12 @@
         <tr>
             <td>
                 <div class="for_btn">
-                    <a href="/worker_add_form" class="btn">{{ b_names["add"] }}</a>
+                    <a href="/worker_add_form{{q}}" class="btn">{{ b_names["add"] }}</a>
                 </div>
             </td>
             <td>
                 <div class="for_btn">
-                        <a href="/worker_edit_form/{{data[0][col_names[0]]}}" class="btn">{{ b_names["edit"] }}</a>
+                        <a href="/worker_edit_form/{{data[0][col_names[0]]}}{{q}}" class="btn">{{ b_names["edit"] }}</a>
                 </div>
             </td>
             <td>
@@ -51,7 +56,7 @@
 
     <br>
     <div class="for_btn">
-            <a href="/workers" class="btn">{{ b_names["back_list"] }}</a>
+            <a href="/workers{{q}}" class="btn">{{ b_names["back_list"] }}</a>
     </div>
 
 </div>

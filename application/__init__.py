@@ -33,6 +33,7 @@ def init_app():
     from application.funcs.errors import init_errors
     app = init_errors(app)
     from application.funcs.fb_scraper import init_fb_scraper; app = init_fb_scraper(app)
+    from application.funcs.test import init_test; app = init_test(app)
     # from application.funcs.auth import init_auth; app = init_auth(app)
 
     app.lang = 'rus'

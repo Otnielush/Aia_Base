@@ -21,18 +21,28 @@ def init_workers(app):
 
     @app.route('/worker_add_form')
     def worker_add_form():
+        try:
+            q_val = None
+            q_val = request.args['q']
+        except: pass
+
         # Language selector
         cols_names, button_names = lang_select(app.lang, 'workers')
         return render_template('workers/worker_add_form.html', data_cols=cols_w[1:-2], col_names=cols_names[1:-2],
-                               b_names=button_names)
+                               b_names=button_names, q=q_val)
 
     @app.route('/worker_edit_form/<int:id>')
     def worker_edit_form(id):
+        try:
+            q_val = None
+            q_val = request.args['q']
+        except: pass
+
         data = read_db_id('workers', id)
         # Lang selector
         cols_names, button_names = lang_select(app.lang, 'workers')
         return render_template('workers/worker_edit_form.html', data=data, data_cols=cols_w[0:-2],
-                               col_names=cols_names[0:-2],
+                               col_names=cols_names[0:-2], q=q_val,
                                b_names=button_names, id=id)
 
     @app.route('/w_del', methods=['POST'])
@@ -202,25 +212,45 @@ def init_workers(app):
         con = sql.connect(DB_ROOT)
         con.row_factory = sql.Row
 
-        if request.method == 'GET':
+        try:
+            q_val = None
+            q_val = request.args['q']
+        except: pass
+
+        if request.method == 'GET' and not q_val:
             cur = con.cursor()
             cur.execute("SELECT " + ', '.join(cols_w[rows]) + " FROM workers ORDER BY date_update DESC")
             data = [dict(x) for x in cur.fetchall()]
 
-        elif request.method == 'POST':
-            search_word = request.form['q']
+        elif request.method == 'POST' or q_val:
+            if request.method == 'POST':
+                # print(f"{q_val = }")
+                search_word = request.form['q']
+                if q_val and len(search_word) > 0:
+                    search_word = q_val +',' + search_word
+                q_val = search_word
+            else:
+                search_word = q_val
+
             # TODO search column (column: query)
             if search_word:
+                cur = con.cursor()
                 query_1 = "SELECT " + ', '.join(cols_w[rows]) + " FROM workers WHERE "
                 search_word = search_word.rstrip().lstrip()
                 search_word = search_word.split(',')
                 # if search_word[0][0] in ['а', 'б', 'в', 'г', 'д', 'е', 'ё', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п', 'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'э', 'ю', 'я']:
                 search_cols = search_text_w + search_nums_w
-                query_2 = " OR ".join(["{0} LIKE '%{1}%'".format(cols_w[c], w.rstrip().lstrip()) for w in search_word
-                                       for c in search_cols])
 
-                cur = con.cursor()
+                query_3 = []
+                for w in search_word:
+                    query_2 = " OR ".join(["{0} LIKE '%{1}%'".format(cols_w[c], w.rstrip().lstrip()) for c in search_cols])
+                    query_3.append("("+query_2+")")
 
+                if len(query_3) > 1:
+                    query_2 = " AND ".join(query_3)
+                # print(f"{query_2 = }")
+
+                # result
                 cur.execute(query_1 + query_2 + ' ORDER BY date_update DESC')
                 data = [dict(x) for x in cur.fetchall()]
             else:
@@ -243,13 +273,17 @@ def init_workers(app):
         # Language selector
         cols_names, button_names = lang_select(app.lang, 'workers')
         return render_template('workers/workers.html', data=data, data_cols=list(cols_w[rows]),
-                               col_names=list(cols_names[rows]),
-                               b_names=button_names)
+                               col_names=list(cols_names[rows]), q=q_val,
+                               b_names=button_names, next=request.url)
 
     # TODO для резюме и фото сделать новую стр для просмотра и скачивания
 
     @app.route('/w/<int:id>')
     def worker_full(id):
+        try:
+            q_val = None
+            q_val = request.args['q']
+        except: pass
         # Language selector
         cols_names, button_names = lang_select(app.lang, 'workers')
         data = read_db_id('workers', id)
@@ -257,41 +291,18 @@ def init_workers(app):
             msg = 'Id not found'
             return render_template('result.html', msg=msg, b_names=button_names, autolink='/workers')
         return render_template('workers/worker_full.html', data=data, data_cols=cols_w, col_names=cols_names,
-                               b_names=button_names)
+                               b_names=button_names, q=q_val)
 
 
 
     @app.route("/workers_api", methods=['GET'])
-    def hello():
+    def workers_api():
         if request.method != 'GET':
             return make_response('Malformed request', 400)
         my_dict = {'key': 'dictionary value'}
         headers = {"Content-Type": "application/json"}
         return make_response(jsonify(my_dict), 200, headers)
 
-    @app.route('/test')
-    def test():
-        rows = [0, 1, 2, 3, 11, 12, 13, 17, 20, 22]
-        con = sql.connect(DB_ROOT)
-        con.row_factory = sql.Row
 
-        cur = con.cursor()
-        cur.execute("SELECT " + ', '.join(cols_w[rows]) + " FROM workers")
-        data = [dict(x) for x in cur.fetchall()]
-
-        if len(data) > 0:
-            for dd in data:
-                # dd['date_create'] = datetime.datetime.fromtimestamp(float(dd['date_create'])).strftime("%d-%m-%Y, %H:%M")
-                dd['date_update'] = read_tstamp(dd['date_update'])
-                # dd['date_born'] = datetime.datetime.fromtimestamp(float(dd['date_born'])).strftime("%d-%m-%Y")
-                dd['name'] = dd['name'] + ' ' + dd['lastname']
-        rows.remove(2)
-
-        con.close()
-
-        # Language selector
-        cols_names, button_names = lang_select(app.lang, 'workers')
-        return render_template('test.html', data=data, data_cols=cols_w[rows], col_names=list(cols_names[rows]),
-                               b_names=button_names)
 
     return app

@@ -47,7 +47,7 @@ def init_jobs(app):
             conn.close()
             # Lang selector
             cols_names, button_names = lang_select(app.lang, 'jobs')
-            return render_template('result.html', b_names=button_names, msg=msg)
+            return render_template('result.html', b_names=button_names, msg=msg, autolink='/jobs')
 
 
     @app.route('/job_update', methods=['PUT', 'POST'])
@@ -193,6 +193,15 @@ def init_jobs(app):
         cols_names, button_names = lang_select(app.lang, 'jobs')
         data = read_db_id('jobs', id)
         return render_template('jobs/job_full.html', data=data, data_cols=cols_j, col_names=cols_names, b_names=button_names)
+
+    @app.route('/jpost/<int:id>')
+    def job_post(id):
+        rows = [1, 2, 5, 7, 8]
+        # Language selector
+        cols_names, button_names = lang_select(app.lang, 'jobs')
+        data = read_db_id('jobs', id)
+        return render_template('jobs/job_post.html', data=data, data_cols=cols_j[rows], col_names=cols_names,
+                               b_names=button_names)
 
     return app
 

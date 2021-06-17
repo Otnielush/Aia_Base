@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ data[0]['name'] }}</title>
+<!--    <link rel="stylesheet" href="/static/style_t1.css"/>-->
+    <style type="text/css">
+        body {
+            font-family: Helvetica;
+        }
+         textarea {
+            font-size: 12pt;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <br>
+
+
+        {% for col in data_cols %}
+        <ul>
+<!--            <b>{{ col_names[loop.index] }}: </b>-->
+            {% if col == "details" %}
+                <textarea cols="60" name={{col}} rows="40">{{data[0][col]}}</textarea>
+            {% else %}
+                {{data[0][col]}}
+            {% endif %}
+
+        </ul>
+        {% endfor %}
+
+    <br>
+
+</body>
+</html>
