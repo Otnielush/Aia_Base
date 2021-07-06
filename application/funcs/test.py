@@ -25,3 +25,6 @@ def init_test(app):
 
     return app
 
+# from application.funcs.instagram_post import Instagram
+# ins = Instagram()
+# print(ins.bot)

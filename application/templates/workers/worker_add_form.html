@@ -35,7 +35,9 @@
                     {% for val in rng %}
                         <option value={{ val }}>{{ b_names[val] }}</option>
                     {% endfor %}
-                </select></td>
+                </select>
+<!--                <input type="range" name="{{col}}" min="{{rng[0]}}" max="{{rng[-1]}}">-->
+                </td>
 
                 {% elif col == 'marital_status' %}
                 <td><b>{{ col_names[loop.index0] }}</b></td>

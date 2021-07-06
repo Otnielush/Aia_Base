@@ -3,6 +3,9 @@ from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 db = SQLAlchemy()
 login_manager = LoginManager()
 
@@ -10,6 +13,13 @@ login_manager = LoginManager()
 def init_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object('application.database.config.DevConfig')
+
+    # Request limiter
+    limiter = Limiter(
+        app,
+        key_func=get_remote_address,
+        default_limits=["10000 per day", "3000 per hour", "1/second"]
+    )
 
     # Initialize Plugins
     db.init_app(app)
@@ -23,6 +33,8 @@ def init_app():
 
     from application.funcs.whatsapp import Whatsapp
     app.whatsapp = Whatsapp()
+    # from application.funcs.instagram_post import Instagram
+    # app.instagram = Instagram()
 
     from application.funcs.workers import init_workers
     app = init_workers(app)
